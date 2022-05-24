@@ -13,11 +13,26 @@ use App\Tag;
 class PostController extends Controller
 {
     protected $validationRules = [
-        'title'     => 'required|max:100',
-        'slug'      => 'required|unique:posts|max:100',
-        'content'   => 'required',
-        'category_id'  => 'required|exists:categories,id', //TODO: se metto il parametro 'required' il metodo updated va in crisi
+        'title'         => 'required|max:100',
+        'slug'          => 'required|unique:posts|max:100',
+        'content'       => 'required',
+        'category_id'   => 'required|exists:categories,id', //TODO: se metto il parametro 'required' il metodo updated va in crisi
+        'tag'           => 'exists:Tag,id'
     ];
+
+    private function getValidators($model) {
+        return [
+            'title'         => 'required|max:100',
+            'slug'          => [
+                'required',
+                Rule::unique('posts')->ignore($model),
+                'max:100'
+            ],
+            'category_id'   => 'required|exists:App\Category,id',
+            'content'       => 'required',
+            'tags'          => 'exists:App\Tag,id'
+        ];
+    }
 
     public function myindex() {
         $posts = Post::where('user_id', Auth::id())->orderBy('updated_at', 'desc')->paginate(20);
@@ -62,7 +77,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
 
-        // $request->validate($this->validationRules); //TODO: blocca l'esecuzione se la slug non è unica prima che il metodo validateSlug() possa cambiarla
+        $request->validate($this->getValidators(null));  //TODO: blocca l'esecuzione se la slug non è unica prima che il metodo validateSlug() possa cambiarla
 
         $postData = $request->all() + ['user_id' => Auth::id()];
 
@@ -96,10 +111,12 @@ class PostController extends Controller
         if (Auth::user()->id !== $post->user_id) abort(403);
 
         $categories = Category::all();
+        $tags = Tag::all();
 
         return view('admin.posts.edit', [
             'post'              => $post,
             'categories'        => $categories,
+            'tags'              => $tags
         ]);
     }
 
@@ -114,13 +131,7 @@ class PostController extends Controller
     {
         if (Auth::user()->id !== $post->user_id) abort(403);
 
-        $this->validationRules['slug'] = [
-           ' required',
-           Rule::unique('posts')->ignore($post),
-           'max:100'
-        ];
-
-        $request->validate($this->validationRules);
+        $request->validate($this->getValidators($post));
 
         $postData = $request->all();
 
@@ -141,7 +152,6 @@ class PostController extends Controller
     {
         if (Auth::user()->id !== $post->user_id) abort(403);
 
-        // $post = Post::where('slug', $slug);
         $post->delete();
 
         return redirect(route('admin.home'))->with('status', "Post: $post->title deleted");
