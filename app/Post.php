@@ -51,12 +51,16 @@ class Post extends Model
         return $slug;
     }
 
-    //relazione con tabella users
+    //relazioni tabelle db
     public function user() {
         return $this->belongsTo('App\User');
     }
 
     public function category() {
         return $this->belongsTo('App\Category');
+    }
+
+    public function tags() {
+        return $this->belongsToMany('App\Tag');
     }
 }
