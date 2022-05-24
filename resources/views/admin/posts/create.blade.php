@@ -6,6 +6,7 @@
 
         <form method="POST" action="{{ route('admin.posts.store') }}">
             @csrf
+            {{-- title --}}
             <div class="form-group mb-3">
                 <label for="title">{{ __('Post title') }}</label>
                 <input type="text" class="form-control" id="title" name="title" placeholder="title" value="{{ old('title')}}">
@@ -14,6 +15,7 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
 
+            {{-- slug --}}
             <div class="form-group mb-3">
                 <label for="slug">{{ __('Slug') }}</label>
                 <input type="text" class="form-control" id="slug" name="slug" placeholder="slug" value="{{ old('slug')}}">
@@ -35,6 +37,19 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
 
+            {{-- tags --}}
+            <fieldset>
+                <legend>Tags</legend>
+                @foreach ($tags as $tag)
+                    <div class="form-check d-inline-block">
+
+                        <input class="form-check-input" type="checkbox" name="tags[]" value="{{ $tag->id }}" id="tag-{{ $tag->id }}">
+                        <label class="form-check-label" for="tag-{{ $tag->id }}">{{ $tag->name }}</label>
+                    </div>
+                @endforeach
+            </fieldset>
+
+            {{-- content --}}
             <div class="form-group mb-3">
                 <label for="content">{{ __('Description') }}</label>
                 <textarea class="form-control" id="content" rows="4" placeholder="content" name="content">{{ old('content')}}</textarea>

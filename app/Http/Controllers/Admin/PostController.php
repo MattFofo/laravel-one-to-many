@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Post;
 use App\Category;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -44,8 +45,12 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $tags = Tag::all();
 
-        return view('admin.posts.create', compact('categories'));
+        return view('admin.posts.create', [
+            'categories'    => $categories,
+            'tags'          => $tags
+        ]);
     }
 
     /**
