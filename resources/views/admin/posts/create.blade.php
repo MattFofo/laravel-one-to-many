@@ -43,11 +43,15 @@
                 @foreach ($tags as $tag)
                     <div class="form-check d-inline-block">
 
-                        <input class="form-check-input" type="checkbox" name="tags[]" value="{{ $tag->id }}" id="tag-{{ $tag->id }}">
+                        <input class="form-check-input" type="checkbox" name="tags[]" value="{{ $tag->id }}" id="tag-{{ $tag->id }}"
+                        @if (in_array($tag->id, old('tags', []))) checked @endif>
                         <label class="form-check-label" for="tag-{{ $tag->id }}">{{ $tag->name }}</label>
                     </div>
                 @endforeach
             </fieldset>
+            @error('tags')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
 
             {{-- content --}}
             <div class="form-group mb-3">

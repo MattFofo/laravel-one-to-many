@@ -7,6 +7,8 @@
         <form method="POST" action="{{ route('admin.posts.update', $post) }}">
             @csrf
             @method('PUT')
+
+            {{-- title --}}
             <div class="form-group mb-3">
                 <label for="title">Post title</label>
                 <input type="text" class="form-control" id="title" name="title" placeholder="title" value="{{ old(('content'), $post->title) }}">
@@ -14,6 +16,8 @@
             @error('title')
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
+
+            {{-- slug --}}
             <div class="form-group mb-3">
                 <label for="slug">Slug</label>
                 <input type="text" class="form-control" id="slug" name="slug" placeholder="slug" value="{{ old(('content'), $post->slug) }}">
@@ -39,6 +43,24 @@
                 <div class="alert alert-danger">{{ $message }}</div>
             @enderror
 
+            {{-- tags --}}
+            <fieldset>
+                <legend>Tags</legend>
+                @foreach ($tags as $tag)
+                    <div class="form-check d-inline-block">
+
+                        <input class="form-check-input" type="checkbox" name="tags[]" value="{{ $tag->id }}" id="tag-{{ $tag->id }}"
+                            @if (in_array($tag->id, old('tags', $post->tags->pluck('id')->all()))) checked @endif>
+                        <label class="form-check-label" for="tag-{{ $tag->id }}">{{ $tag->name }}</label>
+                    </div>
+                @endforeach
+            </fieldset>
+            @error('tags')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+
+
+            {{-- description --}}
             <div class="form-group mb-3">
                 <label for="content">Description</label>
                 <textarea class="form-control" id="content" rows="4" placeholder="content" name="content">{{ old(('content'), $post->content) }}</textarea>

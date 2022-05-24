@@ -8,6 +8,7 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Title</th>
+                    <th scope="col">Category</th>
                     <th scope="col">Slug</th>
                     <th scope="col">Created at</th>
                     <th scope="col">Updated at</th>
@@ -20,6 +21,7 @@
 
                         <th scope="row">{{ $post->id }}</th>
                         <td>{{ $post->title }}</td>
+                        <td><span class="badge bg-primary">{{ $post->category->name }}</span></td>
                         <td>{{ $post->slug }}</td>
                         <td>{{ date('d/m/Y', strtotime($post->created_at)) }}</td>
                         <td>{{ date('d/m/Y', strtotime($post->updated_at)) }}</td>
