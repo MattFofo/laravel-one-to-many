@@ -1,0 +1,20 @@
+.overlay-alert-delete {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    display: flex;
+    background-color: rgba(0, 0, 0, .5);
+
+    .content-alert-delete {
+        height: 200px;
+        width: 300px;
+        margin: auto;
+        padding: 1.2rem;
+        background-color: lightblue;
+        border-radius: 8px;
+        box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    }
+}
